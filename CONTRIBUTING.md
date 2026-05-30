@@ -1,7 +1,7 @@
 ---
 # Contribution & Publishing Guide
 
-This guide explains the branch-based workflow for contributing changes to `@7oby/aw` and the process for releasing new versions.
+This guide explains the branch-based workflow for contributing changes to `@7obyGit/aw` and the process for releasing new versions.
 
 ## Branching & Contribution Workflow
 

@@ -1,6 +1,6 @@
 # aw — Automated Workflow 🚀
 
-[![npm version](https://img.shields.io/npm/v/@7oby/aw.svg)](https://www.npmjs.com/package/@7oby/aw)
+[![npm version](https://img.shields.io/npm/v/@7obyGit/aw.svg)](https://www.npmjs.com/package/@7obyGit/aw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 `aw` is a powerful CLI tool designed to find and execute scripts across your projects. It unifies your workflow by automatically discovering scripts from multiple sources — including NPM, Python, .NET, and CI pipelines — providing a single, beautiful interface to run them all.
@@ -12,7 +12,7 @@
 Get up and running with a single command:
 
 ```bash
-npm install -g @7oby/aw
+npm install -g @7obyGit/aw
 ```
 
 ### Other Options
