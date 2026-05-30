@@ -1,0 +1,52 @@
+{
+  "name": "@7oby/aw",
+  "version": "0.1.1",
+  "type": "module",
+  "description": "Automated Workflow CLI",
+  "author": "7obyGit <toby.gitt@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7obyGit/aw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/7obyGit/aw/issues"
+  },
+  "homepage": "https://github.com/7obyGit/aw#readme",
+  "keywords": [
+    "cli",
+    "workflow",
+    "automation",
+    "scripts"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "aw": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "watch": "tsup src/index.ts --format esm --watch",
+    "build": "tsup src/index.ts --format esm --clean --minify",
+    "start": "node dist/index.js",
+    "lint": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "cac": "^6.7.14",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "prettier": "^3.8.3",
+    "tsup": "^8.0.1",
+    "tsx": "^4.22.0",
+    "typescript": "^5.3.3",
+    "vitest": "^4.1.6"
+  }
+}
