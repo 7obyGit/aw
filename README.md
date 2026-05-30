@@ -56,6 +56,8 @@ aw
 ## ✨ Features
 
 - 🔍 **Auto-Discovery**: Instantly finds scripts in `package.json`, `.sh`, `.bat`, `.ps1`, `pyproject.toml`, and more.
+- 🌍 **Smart Environment**: Automatically loads `.env` files from your project root to CWD, merging variables
+  intelligently.
 - 🛠️ **Unified Interface**: One command to rule them all. No more switching between `npm run`, `poetry run`, or manual `./script.sh`.
 - 🤖 **Local CI Runner**: Run your GitHub Actions or GitLab CI jobs locally using `act` or `gitlab-ci-local`.
 - 📋 **Command Recording**: Record your terminal sequences and save them as reusable scripts with `aw record`.
