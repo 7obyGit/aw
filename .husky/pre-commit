@@ -1,5 +1,5 @@
 npm run lint
 npm run test
 
-npx --no -- commitlint --edit "$1"
+npx commitlint --edit "$1"
 npx validate-branch-name
