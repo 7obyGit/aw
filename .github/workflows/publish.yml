@@ -43,6 +43,7 @@ jobs:
       - name: Automated Version & Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
         run: npx semantic-release
 
       # Ensure the code is up to date with main
