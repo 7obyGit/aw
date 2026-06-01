@@ -5,7 +5,9 @@
     "access": "public"
   },
   "release": {
-    "branches": ["main"]
+    "branches": [
+      "main"
+    ]
   },
   "type": "module",
   "description": "Automated Workflow CLI",
@@ -34,6 +36,7 @@
     "aw": "./dist/index.js"
   },
   "scripts": {
+    "prepare": "husky",
     "dev": "tsx src/index.ts",
     "watch": "tsup src/index.ts --format esm --watch",
     "build": "tsup src/index.ts --format esm --clean --minify",
@@ -49,11 +52,19 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@types/node": "^25.9.1",
+    "husky": "^9.1.7",
     "prettier": "^3.8.3",
     "tsup": "^8.0.1",
     "tsx": "^4.22.0",
     "typescript": "^5.3.3",
+    "validate-branch-name": "^1.3.2",
     "vitest": "^4.1.6"
+  },
+  "validate-branch-name": {
+    "pattern": "^(main|dev){1}$|^(feat|fix|chore|docs|style|refactor|perf|test|build|ci)\\/.+$",
+    "errorMsg": "❌ Error: Invalid branch name format.\nBranches must use conventional prefixes. Example: feat/login-screen or fix/typo"
   }
 }
