@@ -1,5 +1,6 @@
 # aw — Automated Workflow 🚀
 
+[![CI Status](https://github.com/7obyGit/aw/actions/workflows/pull-request.yml/badge.svg)](https://github.com/7obyGit/aw/actions)
 [![npm version](https://img.shields.io/npm/v/@7obygit/aw.svg)](https://www.npmjs.com/package/@7obygit/aw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

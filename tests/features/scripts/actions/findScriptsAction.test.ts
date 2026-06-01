@@ -158,7 +158,7 @@ describe("findScriptsAction", () => {
         // "test" (exact match) should be first, "testing" (substring match) second
         const message = vi.mocked(prompts.log.message).mock.calls[0][0];
         if (!message) throw new Error("No message logged");
-        const lines = message.split("\n");
+        const lines = typeof message !== "string" ? message : message.split("\n");
         // Header is line 0, divider is line 1, first result is line 2
         expect(lines[2]).toContain("test");
         expect(lines[3]).toContain("testing");
