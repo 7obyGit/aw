@@ -1,0 +1,5 @@
+npm run lint
+npm run test
+
+npx commitlint --edit "$1"
+npx validate-branch-name
