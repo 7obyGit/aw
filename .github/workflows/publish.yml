@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
 
     steps:
@@ -26,6 +25,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
         run: npm ci
@@ -36,44 +36,13 @@ jobs:
           npm run format:check
           npm test
 
-      - name: Build Project
-        run: npm run build
-
-      # Creates a commit to main with the updated version number
-      - name: Automated Version & Publish
+      - name: Publish to NPM
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npx semantic-release
-          echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
-
-      # Create the Sync PR from main into dev
-      - name: Create Sync PR to Dev
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: dev
-          branch: chore/sync-release-v${{ env.NEW_VERSION }}-to-dev
-          title: "chore: sync release v${{ env.NEW_VERSION }} to dev"
-          body: |
-           This is an automated PR to sync the latest release version, changelog, and tags from `main` back into the `dev` branch.
-           
-           Please review and merge to keep development environments aligned.
-          commit-message: "chore: sync release v${{ env.NEW_VERSION }} to dev [skip ci]"
-          delete-branch: true
-
-      # Create the PR to update main with version bump and changelog
-      - name: Create PR to Update Main
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: chore/update-release-v${{ env.NEW_VERSION }}-on-main
-          title: "chore(release): v${{ env.NEW_VERSION }}"
-          body: |
-           This is an automated PR to update the version number and CHANGELOG.md on the `main` branch after a successful release.
-           
-           This is necessary because direct pushes to `main` are restricted.
-          commit-message: "chore(release): v${{ env.NEW_VERSION }} [skip ci]"
-          delete-branch: true
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view @7obygit/aw@$VERSION > /dev/null 2>&1; then
+            echo "Version $VERSION already exists on NPM. Skipping publish."
+          else
+            npm publish --access public --provenance
+          fi

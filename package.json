@@ -7,13 +7,24 @@
   },
   "release": {
     "branches": [
-      "main"
+      "main",
+      "dev"
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "CHANGELOG.md"
+          ],
+          "message": "chore(release): v${nextRelease.version} [skip ci]"
+        }
+      ],
       "@semantic-release/github"
     ]
   },
@@ -52,7 +63,8 @@
     "lint": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\"",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@clack/prompts": "^1.5.0",
