@@ -6,12 +6,6 @@
 * Added more integrations, completion support, and argument passing ([0e6008c](https://github.com/7obyGit/aw/commit/0e6008c3dd59af1a22131f6f8168b6bb7fec8a28))
 * Added tests for npm and CI integrations with support for parent directory discovery ([f95b927](https://github.com/7obyGit/aw/commit/f95b9277089b7cc8cd8f3e19c5e3ec488b6c059c))
 * Updated the list sources action to include only non-empty ones by default ([ee6e67d](https://github.com/7obyGit/aw/commit/ee6e67db55b8532917f2fe5aa97db6b50235f5ea))
-
-# [0.4.0](https://github.com/7obyGit/aw/compare/v0.3.0...v0.4.0) (2026-06-02)
-
-
-### Features
-
 * Added describe command ([910e020](https://github.com/7obyGit/aw/commit/910e02071e7ef1a9772af1b0512abd96c7c49c2d))
 * Added maven and gradle integrations ([1ad3459](https://github.com/7obyGit/aw/commit/1ad3459426fbe48bdc7faa2987e0653449ab3711))
 

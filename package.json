@@ -7,8 +7,8 @@
   },
   "release": {
     "branches": [
-      "main",
-      "dev"
+      "dev",
+      "main"
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
@@ -31,7 +31,12 @@
           "message": "chore(release): v${nextRelease.version} [skip ci]"
         }
       ],
-      "@semantic-release/github"
+      [
+        "@semantic-release/github",
+        {
+          "makeLatest": true
+        }
+      ]
     ]
   },
   "type": "module",
