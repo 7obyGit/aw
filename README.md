@@ -1,10 +1,10 @@
-# aw — Automated Workflow 🚀
+# Automated Workflow 🚀
 
 [![CI Status](https://github.com/7obyGit/aw/actions/workflows/pull-request.yml/badge.svg)](https://github.com/7obyGit/aw/actions)
 [![npm version](https://img.shields.io/npm/v/@7obygit/aw.svg)](https://www.npmjs.com/package/@7obygit/aw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`aw` is a powerful CLI tool designed to find and execute scripts across your projects. It unifies your workflow by automatically discovering scripts from multiple sources — including NPM, Python, Java, .NET, and CI pipelines — providing a single, beautiful interface to run them all.
+`aw` is a powerful CLI tool designed to find and execute scripts across your projects. It unifies your workflow by automatically discovering scripts from multiple sources, including NPM, Python, Java, .NET, and CI pipelines, providing a single beautiful interface to run them all.
 
 ---
 
@@ -47,19 +47,21 @@ aw
    ```bash
    aw find build
    ```
-3. **Run** a script:
+3. **Run** a script (optionally pass arguments):
    ```bash
-   aw run <script-name>
+   aw run <script-name> -- --port 3000
    ```
 
 ---
 
 ## ✨ Features
 
-- 🔍 **Auto-Discovery**: Instantly finds scripts in `.aw`, `package.json`, `pyproject.toml`, `pom.xml`, `build.gradle`, `.csproj`, `.sh`, `.bat`, `.ps1`, and more.
+- 🔍 **Auto-Discovery**: Instantly finds scripts in `.aw`, `package.json`, `pyproject.toml`, `pom.xml`, `build.gradle`, `.csproj`, `Makefile`, `docker-compose.yml`, `Cargo.toml`, `go.mod`, `Taskfile.yml`, `Justfile`, and more.
 - 🌍 **Smart Environment**: Automatically loads `.env` files from your project root to CWD, merging variables
   intelligently.
-- 🛠️ **Unified Interface**: One command to rule them all. No more switching between `npm run`, `poetry run`, or manual `./script.sh`.
+- 🛠️ **Unified Interface**: One command to rule them all. No more switching between `npm run`, `poetry run`, `make`, or `cargo`.
+- 🚀 **Argument Passing**: Pass additional arguments directly to the underlying scripts using `aw run <name> -- <args>`.
+- ⌨️ **Shell Completion**: Tab-completion support for Bash, Zsh, and Fish.
 - 🤖 **Local CI Runner**: Run your GitHub Actions or GitLab CI jobs locally using `act` or `gitlab-ci-local`.
 - 📋 **Command Recording**: Record your terminal sequences and save them as reusable scripts with `aw record`.
 - 🔗 **JSON Support**: Pipeline-friendly output for every command with the `--json` flag.
@@ -75,6 +77,12 @@ aw
 | :--- |:-----------------------------------------------------------------------------------------|
 | **Local `.aw`** | Project-specific scripts and manual overrides (scans up the directory tree).             |
 | **NPM** | Automatically pulls all scripts defined in `package.json`.                               |
+| **Makefile** | Automatically finds targets in `Makefile` or `makefile`.                                 |
+| **Docker Compose** | Standard commands (`up`, `down`, `ps`, etc.) for `docker-compose.yml` or `compose.yaml`. |
+| **Cargo (Rust)** | Common `cargo` commands (`build`, `run`, `test`, etc.) when `Cargo.toml` is present.     |
+| **Go** | Common `go` commands (`build`, `run`, `test`, etc.) when `go.mod` is present.             |
+| **Taskfile** | Discovers tasks in `Taskfile.yml` or `Task.yml`.                                         |
+| **Justfile** | Discovers recipes in `Justfile`.                                                         |
 | **Python** | Support for `poetry` and `uv` scripts defined in `pyproject.toml`.                       |
 | **Java** | Support for standard Java Maven (`pom.xml`), and Gradle (`build.gradle`/`.kts`).         |
 | **.NET** | Discovers standard tasks (`build`, `test`, `watch`, etc.) in `.csproj` and `.sln` files. |
@@ -128,6 +136,7 @@ aw
 | `aw add script <name> <path>` | Manually add a specific script to your configuration. |
 | `aw list sources` | Show all configured script sources. |
 | `aw env` | Show environment variables available to scripts. |
+| `aw completion <shell>` | Generate shell completion script (bash, zsh, fish). |
 | `aw remove <type> <id>` | Remove a `source` or `script` from the configuration. |
 
 **Global Options:**

@@ -18,6 +18,7 @@ import { execAction } from "./features/scripts/actions/execAction.js";
 import { findScriptsAction } from "./features/scripts/actions/findScriptsAction.js";
 import { recordAction } from "./features/scripts/actions/recordAction.js";
 import { describeScriptAction } from "./features/scripts/actions/describeScriptAction.js";
+import { completionAction } from "./features/core/completionAction.js";
 import { findClosestMatch } from "./features/core/utils/stringUtils.js";
 import "./features/integrations/index.js";
 
@@ -97,9 +98,9 @@ async function main(): Promise<void> {
         });
 
     cliInstance
-        .command("run <scriptName>", "Run the specified script")
-        .action(async (scriptName: string) => {
-            await runScriptAction(scriptName);
+        .command("run <scriptName> [...extraArgs]", "Run the specified script")
+        .action(async (scriptName: string, extraArgs: string[]) => {
+            await runScriptAction(scriptName, extraArgs);
         });
 
     cliInstance
@@ -125,6 +126,12 @@ async function main(): Promise<void> {
     cliInstance.command("record", "Record a sequence of commands to a script").action(async () => {
         await recordAction();
     });
+
+    cliInstance
+        .command("completion <shell>", "Generate shell completion script (bash, zsh, fish)")
+        .action(async (shell: string) => {
+            await completionAction(shell);
+        });
 
     cliInstance.help();
     cliInstance.version(VERSION);
