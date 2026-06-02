@@ -2,11 +2,11 @@ import * as prompts from "@clack/prompts";
 import colors from "picocolors";
 import { IIntegration, integrationManager } from "../../integrations";
 
-export async function listSourcesAction(options: { json?: boolean }): Promise<void> {
+export async function listSourcesAction(options: { json?: boolean; all?: boolean }): Promise<void> {
     const integrations: IIntegration[] = integrationManager.getIntegrations();
     const workingDirectory: string = process.cwd();
 
-    const sourcesData = await Promise.all(
+    let sourcesData = await Promise.all(
         integrations.map(async (integration) => {
             const scripts = await integration.getScripts(workingDirectory);
             return {
@@ -18,6 +18,17 @@ export async function listSourcesAction(options: { json?: boolean }): Promise<vo
         })
     );
 
+    const totalCount = sourcesData.length;
+
+    // Sort by count descending
+    sourcesData.sort((a, b) => b.count - a.count);
+
+    // Filter out zero-count sources unless 'all' is requested
+    if (!options.all) {
+        sourcesData = sourcesData.filter((s) => s.count > 0);
+    }
+    const hiddenCount = totalCount - sourcesData.length;
+
     if (options.json) {
         console.log(JSON.stringify(sourcesData, null, 2));
         return;
@@ -26,7 +37,15 @@ export async function listSourcesAction(options: { json?: boolean }): Promise<vo
     prompts.intro(colors.magenta("Listing sources..."));
 
     if (sourcesData.length === 0) {
-        prompts.outro(colors.yellow("No sources configured."));
+        if (hiddenCount > 0) {
+            prompts.outro(
+                colors.yellow(
+                    `No sources with scripts found. (${hiddenCount} empty source${hiddenCount === 1 ? "" : "s"} hidden, use --all to show)`
+                )
+            );
+        } else {
+            prompts.outro(colors.yellow("No sources configured."));
+        }
     } else {
         const maxWidths = {
             id: Math.max(...sourcesData.map((s) => s.id.length), 2),
@@ -55,10 +74,14 @@ export async function listSourcesAction(options: { json?: boolean }): Promise<vo
 
         prompts.log.message([header, divider, ...rows].join("\n"));
 
-        prompts.outro(
-            colors.green(
-                `Total: ${sourcesData.length} source${sourcesData.length === 1 ? "" : "s"} available.`
-            )
+        let footer = colors.green(
+            `Total: ${sourcesData.length} source${sourcesData.length === 1 ? "" : "s"} available.`
         );
+        if (hiddenCount > 0) {
+            footer += colors.dim(
+                ` (${hiddenCount} more empty source${hiddenCount === 1 ? "" : "s"} hidden, use --all to show)`
+            );
+        }
+        prompts.outro(footer);
     }
 }

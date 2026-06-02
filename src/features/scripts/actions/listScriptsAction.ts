@@ -3,7 +3,7 @@ import colors from "picocolors";
 import { integrationManager } from "../../integrations/index.js";
 import { IScript } from "../types/IScript";
 
-export async function listScriptsAction(options: { json?: boolean }): Promise<void> {
+export async function listScriptsAction(options: { json?: boolean; all?: boolean }): Promise<void> {
     const workingDirectory: string = process.cwd();
     const scripts: IScript[] = await integrationManager.discoverScripts(workingDirectory);
 
