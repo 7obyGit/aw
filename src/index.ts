@@ -17,6 +17,7 @@ import { removeSourceAction } from "./features/sources/actions/removeSourceActio
 import { execAction } from "./features/scripts/actions/execAction.js";
 import { findScriptsAction } from "./features/scripts/actions/findScriptsAction.js";
 import { recordAction } from "./features/scripts/actions/recordAction.js";
+import { describeScriptAction } from "./features/scripts/actions/describeScriptAction.js";
 import { findClosestMatch } from "./features/core/utils/stringUtils.js";
 import "./features/integrations/index.js";
 
@@ -99,6 +100,13 @@ async function main(): Promise<void> {
         .command("run <scriptName>", "Run the specified script")
         .action(async (scriptName: string) => {
             await runScriptAction(scriptName);
+        });
+
+    cliInstance
+        .command("describe <scriptName>", "Show details of a script")
+        .option("--json", "Output results in JSON format")
+        .action(async (scriptName: string, options: { json?: boolean }) => {
+            await describeScriptAction(scriptName, options);
         });
 
     cliInstance

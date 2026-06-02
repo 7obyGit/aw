@@ -4,7 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/@7obygit/aw.svg)](https://www.npmjs.com/package/@7obygit/aw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`aw` is a powerful CLI tool designed to find and execute scripts across your projects. It unifies your workflow by automatically discovering scripts from multiple sources — including NPM, Python, .NET, and CI pipelines — providing a single, beautiful interface to run them all.
+`aw` is a powerful CLI tool designed to find and execute scripts across your projects. It unifies your workflow by automatically discovering scripts from multiple sources — including NPM, Python, Java, .NET, and CI pipelines — providing a single, beautiful interface to run them all.
 
 ---
 
@@ -56,7 +56,7 @@ aw
 
 ## ✨ Features
 
-- 🔍 **Auto-Discovery**: Instantly finds scripts in `package.json`, `.sh`, `.bat`, `.ps1`, `pyproject.toml`, and more.
+- 🔍 **Auto-Discovery**: Instantly finds scripts in `.aw`, `package.json`, `pyproject.toml`, `pom.xml`, `build.gradle`, `.csproj`, `.sh`, `.bat`, `.ps1`, and more.
 - 🌍 **Smart Environment**: Automatically loads `.env` files from your project root to CWD, merging variables
   intelligently.
 - 🛠️ **Unified Interface**: One command to rule them all. No more switching between `npm run`, `poetry run`, or manual `./script.sh`.
@@ -71,14 +71,15 @@ aw
 
 `aw` intelligently scans your working directory for the following:
 
-| Source | Description |
-| :--- | :--- |
-| **Local `.aw`** | Project-specific scripts and manual overrides (scans up the directory tree). |
-| **NPM** | Automatically pulls all scripts defined in `package.json`. |
-| **Python** | Support for `poetry` and `uv` scripts defined in `pyproject.toml`. |
+| Source | Description                                                                              |
+| :--- |:-----------------------------------------------------------------------------------------|
+| **Local `.aw`** | Project-specific scripts and manual overrides (scans up the directory tree).             |
+| **NPM** | Automatically pulls all scripts defined in `package.json`.                               |
+| **Python** | Support for `poetry` and `uv` scripts defined in `pyproject.toml`.                       |
+| **Java** | Support for standard Java Maven (`pom.xml`), and Gradle (`build.gradle`/`.kts`).         |
 | **.NET** | Discovers standard tasks (`build`, `test`, `watch`, etc.) in `.csproj` and `.sln` files. |
-| **Shell Scripts** | Finds standalone `.sh` (Unix), `.bat`/`.cmd` (Windows), and `.ps1` (PowerShell). |
-| **CI Pipelines** | Discovers GitHub Actions (via `act`) and GitLab CI (via `gitlab-ci-local`) jobs. |
+| **Shell Scripts** | Finds standalone `.sh` (Unix), `.bat`/`.cmd` (Windows), and `.ps1` (PowerShell).         |
+| **CI Pipelines** | Discovers GitHub Actions (via `act`) and GitLab CI (via `gitlab-ci-local`) jobs.         |
 
 ---
 
@@ -118,6 +119,7 @@ aw
 | :--- | :--- |
 | `aw list scripts` | Show all runnable scripts discovered in the current directory. |
 | `aw run <name>` | Execute a script by name. |
+| `aw describe <name>` | Show detailed information about a script. |
 | `aw find <query>` | Search for scripts by name, source, or description. |
 | `aw exec <cmd>` | Run an arbitrary shell command through the `aw` runner. |
 | `aw init` | Initialize a new `.aw` directory for project-specific scripts. |
