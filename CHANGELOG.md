@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/7obyGit/aw/compare/v0.2.3...v0.3.0) (2026-06-02)
+
+
+### Features
+
+* Added aw env vars ([e5cc5e9](https://github.com/7obyGit/aw/commit/e5cc5e9a2172429bc1c645bcdd125e41b9120017))
+
 ## [0.2.3](https://github.com/7obyGit/aw/compare/v0.2.2...v0.2.3) (2026-06-02)
 
 
