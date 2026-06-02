@@ -118,6 +118,7 @@ aw
 | :--- | :--- |
 | `aw list scripts` | Show all runnable scripts discovered in the current directory. |
 | `aw run <name>` | Execute a script by name. |
+| `aw describe <name>` | Show detailed information about a script. |
 | `aw find <query>` | Search for scripts by name, source, or description. |
 | `aw exec <cmd>` | Run an arbitrary shell command through the `aw` runner. |
 | `aw init` | Initialize a new `.aw` directory for project-specific scripts. |
