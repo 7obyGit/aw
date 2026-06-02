@@ -51,7 +51,8 @@ async function main(): Promise<void> {
     cliInstance
         .command("list <type>", "List scripts or sources")
         .option("--json", "Output results in JSON format")
-        .action(async (type: string, options: { json?: boolean }) => {
+        .option("--all", "Show all sources, even those with no scripts")
+        .action(async (type: string, options: { json?: boolean; all?: boolean }) => {
             if (type === "scripts") await listScriptsAction(options);
             else if (type === "sources") await listSourcesAction(options);
             else {

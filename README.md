@@ -134,7 +134,7 @@ aw
 | `aw record` | Interactively record a sequence of commands and save them. |
 | `aw add source <path>` | Add a new directory to the script search path. |
 | `aw add script <name> <path>` | Manually add a specific script to your configuration. |
-| `aw list sources` | Show all configured script sources. |
+| `aw list sources` | Show all configured script sources with at least one script. Use `--all` to show all. |
 | `aw env` | Show environment variables available to scripts. |
 | `aw completion <shell>` | Generate shell completion script (bash, zsh, fish). |
 | `aw remove <type> <id>` | Remove a `source` or `script` from the configuration. |
