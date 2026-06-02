@@ -1,3 +1,16 @@
+# [0.3.0](https://github.com/7obyGit/aw/compare/v0.2.1...v0.3.0) (2026-06-02)
+
+
+### Bug Fixes
+
+* Upversion workflow ([80e16dd](https://github.com/7obyGit/aw/commit/80e16ddb4bd24e113685c6226cad2e50d1f7bb7f))
+
+
+### Features
+
+* Added describe command ([910e020](https://github.com/7obyGit/aw/commit/910e02071e7ef1a9772af1b0512abd96c7c49c2d))
+* Added maven and gradle integrations ([1ad3459](https://github.com/7obyGit/aw/commit/1ad3459426fbe48bdc7faa2987e0653449ab3711))
+
 # [0.3.0](https://github.com/7obyGit/aw/compare/v0.2.3...v0.3.0) (2026-06-02)
 
 
