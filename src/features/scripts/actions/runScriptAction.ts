@@ -11,8 +11,9 @@ import { findClosestMatch } from "../../core/utils/stringUtils.js";
  * with inherited I/O for transparency and interactivity.
  *
  * @param scriptName - The name of the script to run.
+ * @param extraArgs - Additional arguments to pass to the script.
  */
-export async function runScriptAction(scriptName: string): Promise<void> {
+export async function runScriptAction(scriptName: string, extraArgs: string[] = []): Promise<void> {
     prompts.intro(colors.magenta(`Running script: ${scriptName}`));
 
     const workingDirectory: string = process.cwd();
@@ -47,10 +48,13 @@ export async function runScriptAction(scriptName: string): Promise<void> {
         details.push({ label: "Description:", value: script.description });
     }
 
+    const fullCommand =
+        extraArgs.length > 0 ? `${script.command} ${extraArgs.join(" ")}` : script.command;
+
     await executeCommand({
         cwd: workingDirectory,
         displayName: scriptName,
-        command: script.command,
+        command: fullCommand,
         details,
         env: {
             AW_SCRIPT_NAME: script.name,

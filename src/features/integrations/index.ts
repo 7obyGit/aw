@@ -11,6 +11,12 @@ import { UvIntegration } from "./impl/python/uvIntegration.js";
 import { PoetryIntegration } from "./impl/python/poetryIntegration.js";
 import { LocalCiIntegration } from "./impl/ci/localCiIntegration.js";
 import { ScriptSearchIntegration } from "./impl/search/scriptSearchIntegration.js";
+import { MakefileIntegration } from "./impl/makefile/makefileIntegration.js";
+import { DockerComposeIntegration } from "./impl/docker/dockerComposeIntegration.js";
+import { CargoIntegration } from "./impl/rust/cargoIntegration.js";
+import { GoIntegration } from "./impl/go/goIntegration.js";
+import { TaskfileIntegration } from "./impl/task/taskfileIntegration.js";
+import { JustfileIntegration } from "./impl/just/justfileIntegration.js";
 
 // Register built-in integrations
 integrationManager.register(new AwIntegration());
@@ -23,6 +29,12 @@ integrationManager.register(new PoetryIntegration());
 integrationManager.register(new UvIntegration());
 integrationManager.register(new PowershellIntegration());
 integrationManager.register(new BatchIntegration());
+integrationManager.register(new MakefileIntegration());
+integrationManager.register(new DockerComposeIntegration());
+integrationManager.register(new CargoIntegration());
+integrationManager.register(new GoIntegration());
+integrationManager.register(new TaskfileIntegration());
+integrationManager.register(new JustfileIntegration());
 
 const shellIntegration: ShellIntegration = new ShellIntegration();
 integrationManager.register(shellIntegration);

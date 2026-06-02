@@ -114,4 +114,26 @@ describe("runScriptAction", () => {
             })
         );
     });
+
+    it("should append extra arguments to the command", async () => {
+        const mockScript = {
+            name: "test-script",
+            path: "/path/to/script.sh",
+            type: "shell",
+            source: "local",
+            confidence: 1,
+            command: "echo hello",
+            description: "A test script",
+        };
+
+        vi.mocked(integrationManager.getScript).mockResolvedValue(mockScript);
+
+        await runScriptAction("test-script", ["--foo", "bar"]);
+
+        expect(executeCommand).toHaveBeenCalledWith(
+            expect.objectContaining({
+                command: "echo hello --foo bar",
+            })
+        );
+    });
 });
