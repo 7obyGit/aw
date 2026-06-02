@@ -1,5 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
-import { join, extname } from "node:path";
+import { join, extname, resolve, parse, dirname, relative } from "node:path";
 import { IIntegration } from "../../types/IIntegration";
 import { IScript } from "../../../scripts/types/IScript";
 
@@ -13,20 +13,23 @@ export class LocalCiIntegration implements IIntegration {
 
     public async getScripts(workingDirectory: string): Promise<IScript[]> {
         const scripts: IScript[] = [];
+        let currentDir = resolve(workingDirectory);
+        const rootDir = parse(currentDir).root;
 
-        try {
+        while (true) {
             // 1. Process GitHub Actions for local execution via 'act'
-            const githubScripts = await this.discoverGitHubJobs(workingDirectory);
+            const githubScripts = await this.discoverGitHubJobs(currentDir);
             scripts.push(...githubScripts);
 
             // 2. Process GitLab CI for local execution via 'gitlab-ci-local'
-            const gitlabScripts = await this.discoverGitLabJobs(workingDirectory);
+            const gitlabScripts = await this.discoverGitLabJobs(currentDir);
             scripts.push(...gitlabScripts);
 
-            return scripts;
-        } catch {
-            return scripts;
+            if (currentDir === rootDir) break;
+            currentDir = dirname(currentDir);
         }
+
+        return scripts;
     }
 
     /**
@@ -47,11 +50,12 @@ export class LocalCiIntegration implements IIntegration {
                 const content = await readFile(filePath, "utf-8");
 
                 // Basic regex parsing to extract top-level keys inside the 'jobs:' block
-                const jobsBlock = content.match(/^jobs:\s*([\s\S]*?)(?:^[a-zA-Z])/m);
-                if (!jobsBlock) continue;
+                const jobsRegex = /^jobs:[ \t]*(?:#.*)?\n((?:[ \t].*\n?|\n)+)/m;
+                const jobsMatch = content.match(jobsRegex);
+                if (!jobsMatch) continue;
 
                 // Find job IDs (indented string keys immediately under 'jobs:')
-                const jobMatches = jobsBlock[1].matchAll(/^\s{2}([a-zA-Z0-9_-]+):/gm);
+                const jobMatches = jobsMatch[1].matchAll(/^[ \t]{2}([a-zA-Z0-9_-]+):/gm);
 
                 for (const match of jobMatches) {
                     const jobId = match[1];
@@ -66,7 +70,7 @@ export class LocalCiIntegration implements IIntegration {
                         name: `ci:${matchedTask || lowercaseJob}`,
                         path: filePath,
                         type: "github_actions_local",
-                        source: `.github/workflows/${file}`,
+                        source: relative(process.cwd(), filePath),
                         confidence: matchedTask ? 0.8 : 0.5,
                         description: `(Local CI) Run GitHub job '${jobId}' locally`,
                         // 'act -j <job_id>' executes exactly that specific job locally
@@ -95,7 +99,7 @@ export class LocalCiIntegration implements IIntegration {
                 name: "pipeline",
                 path: gitlabCiPath,
                 type: "gitlab_ci_local",
-                source: ".gitlab-ci.yml",
+                source: relative(process.cwd(), gitlabCiPath),
                 confidence: 0.8,
                 description: "(Local CI) Run GitLab pipeline",
                 command: "npx gitlab-ci-local",
@@ -126,7 +130,7 @@ export class LocalCiIntegration implements IIntegration {
                     name: `ci:${matchedTask || lowercaseJob}`,
                     path: gitlabCiPath,
                     type: "gitlab_ci_local",
-                    source: ".gitlab-ci.yml",
+                    source: relative(process.cwd(), gitlabCiPath),
                     confidence: matchedTask ? 0.8 : 0.5,
                     description: `(Local CI) Run GitLab job '${jobId}' locally`,
                     command: `npx gitlab-ci-local "${jobId}"`,
