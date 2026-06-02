@@ -36,7 +36,6 @@ echo -e "${BLUE}Building project...${NC}"
 npm run build
 
 # 5. Run semantic-release locally to upversion
-# We use a temporary config to avoid NPM publishing locally
 echo -e "${BLUE}Calculating next version and updating files...${NC}"
 
 # GITHUB_TOKEN or GH_TOKEN is required by semantic-release to push tags and create GitHub releases.
@@ -51,10 +50,7 @@ if [ -z "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ]; then
   fi
 fi
 
-npx semantic-release --no-ci --config .aw/releaserc.local.json
-
-# Cleanup temporary config
-rm .aw/releaserc.local.json
+npx semantic-release --no-ci
 
 # 6. Create PR from dev to main
 if command -v gh &> /dev/null; then
