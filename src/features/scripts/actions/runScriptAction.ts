@@ -52,5 +52,11 @@ export async function runScriptAction(scriptName: string): Promise<void> {
         displayName: scriptName,
         command: script.command,
         details,
+        env: {
+            AW_SCRIPT_NAME: script.name,
+            AW_SCRIPT_PATH: script.path,
+            AW_SCRIPT_TYPE: script.type,
+            AW_SCRIPT_SOURCE: script.source,
+        },
     });
 }

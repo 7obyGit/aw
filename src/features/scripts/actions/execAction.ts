@@ -20,5 +20,8 @@ export async function execAction(command: string): Promise<void> {
         displayName: "arbitrary command",
         command,
         details: [{ label: "Command:", value: command }],
+        env: {
+            AW_EXEC: "true",
+        },
     });
 }

@@ -82,6 +82,36 @@ aw
 
 ---
 
+## 🌍 Environment Variables
+
+`aw` provides several built-in environment variables to scripts it executes, allowing them to be aware of the `aw` context.
+
+### Built-in Variables (Always Available)
+
+| Variable | Description |
+| :--- | :--- |
+| `AW` | Always set to `true` when running under `aw`. |
+| `AW_VERSION` | The current version of the `aw` CLI. |
+| `AW_BIN` | The absolute path to the `aw` executable. |
+| `AW_CWD` | The working directory where `aw` was invoked. |
+
+### Script-Specific Variables (Available during `aw run`)
+
+| Variable | Description |
+| :--- | :--- |
+| `AW_SCRIPT_NAME` | The name of the script being executed. |
+| `AW_SCRIPT_PATH` | The full path to the script file. |
+| `AW_SCRIPT_TYPE` | The type of script (e.g., `npm`, `shell`, `python`). |
+| `AW_SCRIPT_SOURCE` | The source where the script was discovered. |
+
+### Command-Specific Variables (Available during `aw exec`)
+
+| Variable | Description |
+| :--- | :--- |
+| `AW_EXEC` | Set to `true` when running an arbitrary command via `aw exec`. |
+
+---
+
 ## ⌨️ Command Reference
 
 | Command | Description |
