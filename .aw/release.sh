@@ -15,3 +15,4 @@ git switch main
 git merge --ff-only dev
 git push -f
 
+git switch dev
