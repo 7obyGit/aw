@@ -1,6 +1,21 @@
 # [0.4.0](https://github.com/7obyGit/aw/compare/v0.3.0...v0.4.0) (2026-06-02)
 
 
+### Bug Fixes
+
+* Corrected release scripts as squash merging removes tagged commits ([e593d81](https://github.com/7obyGit/aw/commit/e593d81159a26e172ae745f5bcf18b4223254610))
+* Latest tag issue with releases ([147d75b](https://github.com/7obyGit/aw/commit/147d75ba9baf3f4227d1b5812d1f3d3af7a2b900))
+
+
+### Features
+
+* Added more integrations, completion support, and argument passing ([0e6008c](https://github.com/7obyGit/aw/commit/0e6008c3dd59af1a22131f6f8168b6bb7fec8a28))
+* Added tests for npm and CI integrations with support for parent directory discovery ([f95b927](https://github.com/7obyGit/aw/commit/f95b9277089b7cc8cd8f3e19c5e3ec488b6c059c))
+* Updated the list sources action to include only non-empty ones by default ([ee6e67d](https://github.com/7obyGit/aw/commit/ee6e67db55b8532917f2fe5aa97db6b50235f5ea))
+
+# [0.4.0](https://github.com/7obyGit/aw/compare/v0.3.0...v0.4.0) (2026-06-02)
+
+
 ### Features
 
 * Added more integrations, completion support, and argument passing ([0e6008c](https://github.com/7obyGit/aw/commit/0e6008c3dd59af1a22131f6f8168b6bb7fec8a28))
