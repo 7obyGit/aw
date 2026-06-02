@@ -21,6 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   enforce-conventional-commits:
+    name: Enforce Conventional Commits
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
