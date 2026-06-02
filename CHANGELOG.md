@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/7obyGit/aw/compare/v0.2.2...v0.2.3) (2026-06-02)
+
+
+### Bug Fixes
+
+* Package-lock.json not added during release upversioning ([d61c58e](https://github.com/7obyGit/aw/commit/d61c58ebbca8605725651a41a3de6b28676e4693))
+
 ## [0.2.2](https://github.com/7obyGit/aw/compare/v0.2.1...v0.2.2) (2026-06-02)
 
 
