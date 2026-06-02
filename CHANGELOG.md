@@ -1,3 +1,11 @@
+# [0.4.0](https://github.com/7obyGit/aw/compare/v0.3.0...v0.4.0) (2026-06-02)
+
+
+### Features
+
+* Added describe command ([910e020](https://github.com/7obyGit/aw/commit/910e02071e7ef1a9772af1b0512abd96c7c49c2d))
+* Added maven and gradle integrations ([1ad3459](https://github.com/7obyGit/aw/commit/1ad3459426fbe48bdc7faa2987e0653449ab3711))
+
 # [0.3.0](https://github.com/7obyGit/aw/compare/v0.2.1...v0.3.0) (2026-06-02)
 
 
