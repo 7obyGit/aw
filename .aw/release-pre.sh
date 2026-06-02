@@ -39,24 +39,6 @@ npm run build
 # We use a temporary config to avoid NPM publishing locally
 echo -e "${BLUE}Calculating next version and updating files...${NC}"
 
-# Create a temporary config for local use
-cat > .aw/releaserc.local.json <<EOF
-{
-  "branches": ["dev"],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/changelog",
-    ["@semantic-release/npm", { "npmPublish": false }],
-    ["@semantic-release/git", {
-      "assets": ["package.json", "CHANGELOG.md"],
-      "message": "chore(release): v\${nextRelease.version} [skip ci]"
-    }],
-    "@semantic-release/github"
-  ]
-}
-EOF
-
 # GITHUB_TOKEN or GH_TOKEN is required by semantic-release to push tags and create GitHub releases.
 # If not set, we'll try to use the one from gh cli if available.
 if [ -z "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ]; then
