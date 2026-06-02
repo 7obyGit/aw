@@ -1,3 +1,25 @@
+# [0.3.0](https://github.com/7obyGit/aw/compare/v0.2.3...v0.3.0) (2026-06-02)
+
+
+### Features
+
+* Added aw env vars ([e5cc5e9](https://github.com/7obyGit/aw/commit/e5cc5e9a2172429bc1c645bcdd125e41b9120017))
+
+## [0.2.3](https://github.com/7obyGit/aw/compare/v0.2.2...v0.2.3) (2026-06-02)
+
+
+### Bug Fixes
+
+* Package-lock.json not added during release upversioning ([d61c58e](https://github.com/7obyGit/aw/commit/d61c58ebbca8605725651a41a3de6b28676e4693))
+
+## [0.2.2](https://github.com/7obyGit/aw/compare/v0.2.1...v0.2.2) (2026-06-02)
+
+
+### Bug Fixes
+
+* release-pre script does not publish ([40b1895](https://github.com/7obyGit/aw/commit/40b18953688c45b49f37fec970de76f28c8145ea))
+* Upversion workflow ([80e16dd](https://github.com/7obyGit/aw/commit/80e16ddb4bd24e113685c6226cad2e50d1f7bb7f))
+
 # [0.2.0](https://github.com/7obyGit/aw/compare/v0.1.1...v0.2.0) (2026-06-02)
 
 

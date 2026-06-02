@@ -2,6 +2,7 @@ import * as prompts from "@clack/prompts";
 import colors from "picocolors";
 import { spawn, ChildProcess } from "node:child_process";
 import { loadEnvFiles } from "./envLoader.js";
+import PACKAGE_DATA from "../../../../package.json" assert { type: "json" };
 
 /**
  * Options for command execution.
@@ -43,7 +44,16 @@ export async function executeCommand(options: ExecutionOptions): Promise<void> {
             stdio: ["inherit", "pipe", "pipe"],
             shell: true,
             cwd: cwd,
-            env: { ...process.env, ...envVars, ...options.env, FORCE_COLOR: "1" },
+            env: {
+                ...process.env,
+                ...envVars,
+                AW: "true",
+                AW_VERSION: PACKAGE_DATA.version,
+                AW_BIN: process.argv[1],
+                AW_CWD: cwd,
+                ...options.env,
+                FORCE_COLOR: "1",
+            },
         });
 
         const prefix = colors.dim("│  ");

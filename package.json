@@ -1,6 +1,6 @@
 {
   "name": "@7obygit/aw",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -14,12 +14,18 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
-      "@semantic-release/npm",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
       [
         "@semantic-release/git",
         {
           "assets": [
             "package.json",
+            "package-lock.json",
             "CHANGELOG.md"
           ],
           "message": "chore(release): v${nextRelease.version} [skip ci]"
