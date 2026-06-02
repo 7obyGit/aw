@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/7obyGit/aw/compare/v0.2.0...v0.2.1) (2026-06-02)
+
+
+### Bug Fixes
+
+* Release script did not push changes ([5d18228](https://github.com/7obyGit/aw/commit/5d1822827d21f53bb17a78d3f6708dd8254ba26b))
+
 # [0.2.0](https://github.com/7obyGit/aw/compare/v0.1.1...v0.2.0) (2026-06-02)
 
 
