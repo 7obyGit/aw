@@ -28,9 +28,10 @@ if [ "$CURRENT_BRANCH" != "dev" ]; then
   git checkout dev
 fi
 
-# 2. Pull latest changes
-echo -e "${BLUE}Pulling latest changes...${NC}"
+# 2. Pull latest changes and tags
+echo -e "${BLUE}Pulling latest changes and tags...${NC}"
 git pull origin dev
+git fetch --tags --force
 
 # 3. Store old version to check for changes later
 OLD_VERSION=$(node -p "require('./package.json').version")
@@ -47,6 +48,18 @@ npm run build
 
 # 6. Run semantic-release locally to upversion
 echo -e "${BLUE}Calculating next version and updating files...${NC}"
+
+# Check for tag conflicts. If the current version in package.json has a tag
+# that is not reachable from the current branch, it will cause semantic-release to fail.
+# This often happens after squash-merging a previous release.
+CURRENT_JSON_VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "0.0.0")
+if [ "$CURRENT_JSON_VERSION" != "0.0.0" ] && git rev-parse "v$CURRENT_JSON_VERSION" >/dev/null 2>&1; then
+  if ! git merge-base --is-ancestor "v$CURRENT_JSON_VERSION" HEAD; then
+    echo -e "${YELLOW}Warning: Tag v$CURRENT_JSON_VERSION exists but is not reachable from HEAD.${NC}"
+    echo -e "${BLUE}Moving local tag v$CURRENT_JSON_VERSION to HEAD to avoid conflict...${NC}"
+    git tag -f "v$CURRENT_JSON_VERSION"
+  fi
+fi
 
 # GITHUB_TOKEN or GH_TOKEN is required by semantic-release to push tags and create GitHub releases.
 if [ -z "$GITHUB_TOKEN" ] && [ -z "$GH_TOKEN" ]; then
