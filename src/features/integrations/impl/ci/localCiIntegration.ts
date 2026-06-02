@@ -74,7 +74,7 @@ export class LocalCiIntegration implements IIntegration {
                         confidence: matchedTask ? 0.8 : 0.5,
                         description: `(Local CI) Run GitHub job '${jobId}' locally`,
                         // 'act -j <job_id>' executes exactly that specific job locally
-                        command: `act -j "${jobId}"`,
+                        command: `gh act -j "${jobId}"`,
                     });
                 }
             }
