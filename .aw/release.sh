@@ -9,7 +9,9 @@ git pull
 
 git switch dev
 git rebase main
+git push -f
 
 git switch main
 git merge --ff-only dev
+git push -f
 
