@@ -31,7 +31,9 @@ export async function envAction(options: IEnvActionOptions): Promise<void> {
                     version,
                     builtIn: builtInVariables,
                     variables: detailedEnv.variables,
-                    count: Object.keys(detailedEnv.variables).length + Object.keys(builtInVariables).length,
+                    count:
+                        Object.keys(detailedEnv.variables).length +
+                        Object.keys(builtInVariables).length,
                     sources: detailedEnv.sources,
                 },
                 null,

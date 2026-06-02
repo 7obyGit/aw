@@ -44,7 +44,9 @@ describe("envAction", () => {
 
         await envAction({});
 
-        expect(prompts.log.step).toHaveBeenCalledWith(expect.stringContaining("Built-in Variables:"));
+        expect(prompts.log.step).toHaveBeenCalledWith(
+            expect.stringContaining("Built-in Variables:")
+        );
         expect(prompts.log.message).toHaveBeenCalledWith(expect.stringContaining("AW=true"));
         expect(prompts.log.message).toHaveBeenCalledWith(expect.stringContaining("AW_VERSION="));
         expect(prompts.log.message).toHaveBeenCalledWith(expect.stringContaining("AW_BIN="));
