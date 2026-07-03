@@ -136,4 +136,29 @@ describe("runScriptAction", () => {
             })
         );
     });
+
+    it("should pass custom environment variables to executeCommand", async () => {
+        const mockScript = {
+            name: "test-script",
+            path: "/path/to/script.sh",
+            type: "shell",
+            source: "local",
+            confidence: 1,
+            command: "echo hello",
+            description: "A test script",
+        };
+
+        vi.mocked(integrationManager.getScript).mockResolvedValue(mockScript);
+
+        await runScriptAction("test-script", [], { CUSTOM_VAR: "value" });
+
+        expect(executeCommand).toHaveBeenCalledWith(
+            expect.objectContaining({
+                env: expect.objectContaining({
+                    AW_SCRIPT_NAME: "test-script",
+                    CUSTOM_VAR: "value",
+                }),
+            })
+        );
+    });
 });

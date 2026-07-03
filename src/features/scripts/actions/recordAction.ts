@@ -34,7 +34,6 @@ export async function recordAction(): Promise<void> {
     const recordedCommands: string[] = [];
     const scriptLines: string[] = ["#!/bin/bash", ""];
     let currentCwd = process.cwd();
-    const currentEnv: Record<string, string> = {};
 
     while (true) {
         const command = await prompts.text({
@@ -46,42 +45,13 @@ export async function recordAction(): Promise<void> {
             break;
         }
 
-        // Check for environment variable assignment
-        const envVarMatch = command.match(/^\s*(?:export\s+)?([a-zA-Z_][a-zA-Z0-9_]*)=/);
-        if (envVarMatch) {
-            const varName = envVarMatch[1];
-            const isDynamic = await prompts.confirm({
-                message: `Detected environment variable ${colors.cyan(varName)}. Should its value be retrieved manually each time the script runs?`,
-                initialValue: false,
-            });
-
-            if (prompts.isCancel(isDynamic)) {
-                prompts.outro(colors.yellow("Recording cancelled."));
-                return;
-            }
-
-            if (isDynamic) {
-                scriptLines.push(`# Prompt for ${varName}`);
-                scriptLines.push(`read -p "Enter value for ${varName}: " ${varName}`);
-                scriptLines.push(`export ${varName}`);
-
-                const remainingCommand = extractCommandAfterAssignment(command, varName);
-                if (remainingCommand) {
-                    scriptLines.push(remainingCommand);
-                }
-            } else {
-                scriptLines.push(command);
-            }
-        } else {
-            scriptLines.push(command);
-        }
+        scriptLines.push(command);
 
         // Execute the command
         await executeCommand({
             cwd: currentCwd,
             displayName: command,
             command: command,
-            env: currentEnv,
         });
 
         // Track state changes for the recording session
@@ -92,19 +62,6 @@ export async function recordAction(): Promise<void> {
                 .trim()
                 .replace(/^["']|["']$/g, "");
             currentCwd = path.resolve(currentCwd, target);
-        }
-
-        const envMatch = trimmedCommand.match(/^(?:export\s+)?([a-zA-Z_][a-zA-Z0-9_]*)=(.*)$/);
-        if (envMatch) {
-            const varName = envMatch[1];
-            let value = envMatch[2].trim();
-            if (
-                (value.startsWith('"') && value.endsWith('"')) ||
-                (value.startsWith("'") && value.endsWith("'"))
-            ) {
-                value = value.slice(1, -1);
-            }
-            currentEnv[varName] = value;
         }
 
         recordedCommands.push(command);
@@ -138,19 +95,4 @@ function findClosestAwDir(startDir: string): string | null {
     }
 
     return null;
-}
-
-/**
- * Extracts the part of the command after an environment variable assignment.
- * e.g., "VAR=VAL ./cmd" -> "./cmd", "export VAR=VAL" -> ""
- */
-function extractCommandAfterAssignment(command: string, varName: string): string {
-    const regex = new RegExp(
-        `^\\s*(?:export\\s+)?${varName}=(?:("[^"]*")|('[^']*')|([^\\s]*))\\s*(.*)$`
-    );
-    const match = command.match(regex);
-    if (match) {
-        return (match[4] || "").trim();
-    }
-    return "";
 }

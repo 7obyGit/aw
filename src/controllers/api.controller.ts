@@ -56,7 +56,8 @@ export const aw = {
     /**
      * Run the specified script.
      */
-    run: runScriptAction,
+    run: (scriptName: string, extraArgs: string[] = [], env: Record<string, string> = {}) =>
+        runScriptAction(scriptName, extraArgs, env),
 
     /**
      * Show details of a script.
@@ -71,7 +72,7 @@ export const aw = {
     /**
      * Run an arbitrary shell command.
      */
-    exec: (command: string) => execAction(command),
+    exec: (command: string, env: Record<string, string> = {}) => execAction(command, env),
 
     /**
      * Record a sequence of commands to a script.
