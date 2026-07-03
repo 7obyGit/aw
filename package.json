@@ -56,6 +56,15 @@
     "automation",
     "scripts"
   ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -67,8 +76,8 @@
   "scripts": {
     "prepare": "husky",
     "dev": "tsx src/index.ts",
-    "watch": "tsup src/index.ts --format esm --watch",
-    "build": "tsup src/index.ts --format esm --clean --minify",
+    "watch": "tsup src/index.ts --format esm --watch --dts",
+    "build": "tsup src/index.ts --format esm --clean --minify --dts",
     "start": "node dist/index.js",
     "lint": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
