@@ -102,8 +102,10 @@ export async function runCLI(): Promise<void> {
 
     cliInstance
         .command("run <scriptName> [...extraArgs]", "Run the specified script")
-        .action(async (scriptName: string, extraArgs: string[]) => {
-            await runScriptAction(scriptName, extraArgs);
+        .allowUnknownOptions()
+        .action(async (scriptName: string, extraArgs: string[], options: any) => {
+            const allExtraArgs = [...extraArgs, ...(options["--"] || [])];
+            await runScriptAction(scriptName, allExtraArgs);
         });
 
     cliInstance
@@ -121,9 +123,15 @@ export async function runCLI(): Promise<void> {
         });
 
     cliInstance
-        .command("exec <...command>", "Run an arbitrary shell command")
-        .action(async (commandParts: string[]) => {
-            await execAction(commandParts.join(" "));
+        .command("exec [...command]", "Run an arbitrary shell command")
+        .allowUnknownOptions()
+        .action(async (commandParts: string[], options: any) => {
+            const allParts = [...commandParts, ...(options["--"] || [])];
+            if (allParts.length === 0) {
+                prompts.log.error("Missing command for exec. Usage: aw exec <command>");
+                process.exit(1);
+            }
+            await execAction(allParts.join(" "));
         });
 
     cliInstance.command("record", "Record a sequence of commands to a script").action(async () => {
@@ -139,23 +147,50 @@ export async function runCLI(): Promise<void> {
     cliInstance.help();
     cliInstance.version(VERSION);
 
+    let argv = process.argv;
+    const firstArg: string | undefined = argv.slice(2).find((arg: string) => !arg.startsWith("-"));
+
+    // Handle 'run' and 'exec' by inserting '--' after the script name or command
+    // to ensure trailing optional arguments are passed through to the script/command.
+    if (firstArg === "run" || firstArg === "exec") {
+        const cmdIndex = argv.indexOf(firstArg);
+        if (firstArg === "run") {
+            // Find script name: first non-option after 'run'
+            let scriptNameIndex = -1;
+            for (let i = cmdIndex + 1; i < argv.length; i++) {
+                if (!argv[i].startsWith("-")) {
+                    scriptNameIndex = i;
+                    break;
+                }
+            }
+            if (scriptNameIndex !== -1 && !argv.includes("--")) {
+                argv = [
+                    ...argv.slice(0, scriptNameIndex + 1),
+                    "--",
+                    ...argv.slice(scriptNameIndex + 1),
+                ];
+            }
+        } else if (firstArg === "exec") {
+            if (!argv.includes("--")) {
+                argv = [...argv.slice(0, cmdIndex + 1), "--", ...argv.slice(cmdIndex + 1)];
+            }
+        }
+    }
+
     // If no args or 'help' command, show help
-    const firstArg: string | undefined = process.argv
-        .slice(2)
-        .find((arg: string) => !arg.startsWith("-"));
-    if (process.argv.length <= 2 || firstArg === "help") {
+    if (argv.length <= 2 || firstArg === "help") {
         if (firstArg === "help") {
-            const commandArg: string | undefined = process.argv
-                .slice(process.argv.indexOf("help") + 1)
+            const commandArg: string | undefined = argv
+                .slice(argv.indexOf("help") + 1)
                 .find((arg: string) => !arg.startsWith("-"));
 
             if (commandArg) {
-                cliInstance.parse([...process.argv.slice(0, 2), commandArg, "--help"]);
+                cliInstance.parse([...argv.slice(0, 2), commandArg, "--help"]);
                 return;
             }
         }
 
-        if (process.argv.length <= 2) {
+        if (argv.length <= 2) {
             await displayLandingPage();
         } else {
             cliInstance.outputHelp();
@@ -164,7 +199,7 @@ export async function runCLI(): Promise<void> {
     }
 
     try {
-        cliInstance.parse();
+        cliInstance.parse(argv);
 
         if (!cliInstance.matchedCommand && firstArg) {
             const availableCommands = [
