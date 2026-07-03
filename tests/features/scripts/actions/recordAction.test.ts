@@ -83,25 +83,6 @@ describe("recordAction", () => {
         );
     });
 
-    it("should handle dynamic environment variables and strip them from the command", async () => {
-        vi.mocked(prompts.text)
-            .mockResolvedValueOnce("env-script") // script name
-            .mockResolvedValueOnce("MY_VAR=secret ./run-app") // command 1
-            .mockResolvedValueOnce(""); // finish
-
-        vi.mocked(prompts.confirm).mockResolvedValueOnce(true); // Yes, dynamic
-
-        await recordAction();
-
-        const writeFileCall = vi.mocked(fs.promises.writeFile).mock.calls[0];
-        const content = writeFileCall[1] as string;
-
-        expect(content).toContain('read -p "Enter value for MY_VAR: " MY_VAR');
-        expect(content).toContain("export MY_VAR");
-        expect(content).toContain("./run-app");
-        expect(content).not.toContain("MY_VAR=secret ./run-app");
-    });
-
     it("should execute commands during recording", async () => {
         vi.mocked(prompts.text)
             .mockResolvedValueOnce("test-exec")

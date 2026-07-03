@@ -16,7 +16,7 @@
       [
         "@semantic-release/npm",
         {
-          "npmPublish": true
+          "npmPublish": false
         }
       ],
       [
@@ -56,6 +56,15 @@
     "automation",
     "scripts"
   ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -67,8 +76,8 @@
   "scripts": {
     "prepare": "husky",
     "dev": "tsx src/index.ts",
-    "watch": "tsup src/index.ts --format esm --watch",
-    "build": "tsup src/index.ts --format esm --clean --minify",
+    "watch": "tsup src/index.ts --format esm --watch --dts",
+    "build": "tsup src/index.ts --format esm --clean --minify --dts",
     "start": "node dist/index.js",
     "lint": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
@@ -99,5 +108,9 @@
   "validate-branch-name": {
     "pattern": "^main$|^(feat|fix|chore|docs|style|refactor|perf|test|build|ci)\\/.+$",
     "errorMsg": "❌ Error: Invalid branch name format.\nBranches must use conventional prefixes. Example: feat/login-screen or fix/typo"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.28.1": true
   }
 }

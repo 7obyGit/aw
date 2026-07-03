@@ -12,8 +12,13 @@ import { findClosestMatch } from "../../core/utils/stringUtils.js";
  *
  * @param scriptName - The name of the script to run.
  * @param extraArgs - Additional arguments to pass to the script.
+ * @param env - Additional environment variables to pass to the script.
  */
-export async function runScriptAction(scriptName: string, extraArgs: string[] = []): Promise<void> {
+export async function runScriptAction(
+    scriptName: string,
+    extraArgs: string[] = [],
+    env: Record<string, string> = {}
+): Promise<void> {
     prompts.intro(colors.magenta(`Running script: ${scriptName}`));
 
     const workingDirectory: string = process.cwd();
@@ -61,6 +66,7 @@ export async function runScriptAction(scriptName: string, extraArgs: string[] = 
             AW_SCRIPT_PATH: script.path,
             AW_SCRIPT_TYPE: script.type,
             AW_SCRIPT_SOURCE: script.source,
+            ...env,
         },
     });
 }
