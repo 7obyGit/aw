@@ -12,22 +12,10 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
       [
         "@semantic-release/npm",
         {
           "npmPublish": false
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "package.json",
-            "package-lock.json",
-            "CHANGELOG.md"
-          ],
-          "message": "chore(release): v${nextRelease.version} [skip ci]"
         }
       ],
       [
@@ -97,8 +85,6 @@
     "husky": "^9.1.7",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.0",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "tsup": "^8.0.1",
     "tsx": "^4.22.0",
     "typescript": "^5.3.3",
