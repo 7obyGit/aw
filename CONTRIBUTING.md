@@ -42,61 +42,30 @@ git push origin feature/your-feature-name
 
 ---
 
-## Publishing Steps
+## Automated Releases
 
-The state of the `main` branch represents the source of truth. Once your MR is merged, follow these steps from the `main` branch to sync the `package.json` version and publish.
+This project uses **Semantic Release** to automate the versioning and publishing process.
 
-### 1. Update Local Main Branch
-Switch to `main` and pull the newly merged changes:
-```bash
-git checkout main
-git pull origin main
-```
+### 1. Merge to Main
+Once a Pull Request (PR) is merged into the `main` branch, a GitHub Action is triggered automatically.
 
-### 2. Build the Project
-Verify the production build compiles successfully:
-```bash
-npm run build
-```
+### 2. Automatic Versioning
+Semantic Release analyzes the commit messages since the last release to determine the next version bump (major, minor, or patch). It follows the [Conventional Commits](https://www.conventionalcommits.org/) specification.
 
-### 3. Increment Version
-Bump the version in `package.json` based on the changes introduced in the MR. This automatically creates a Git tag matching the version.
-```bash
-# For bug fixes (0.1.0 -> 0.1.1)
-npm version patch
+### 3. Automatic Publishing
+The automation will:
+1. Update `package.json` with the new version.
+2. Generate a `CHANGELOG.md` entry.
+3. Commit and tag the release in Git.
+4. Publish the package to **NPM**.
+5. Create a **GitHub Release** with the generated release notes.
 
-# For new features (0.1.0 -> 0.2.0)
-npm version minor
-
-# For breaking changes (0.1.0 -> 1.0.0)
-npm version major
-```
-
-### 4. Publish to NPM
-Authenticate and push the package to the registry.
-```bash
-# Login check (if needed)
-npm login
-
-# First time publication for scoped package
-npm publish --access public
-
-# Subsequent publications
-npm publish
-```
-
-### 5. Push Version Tag to GitHub
-Push the automated version bump commit and its tracking tag back up to GitHub:
-```bash
-git push origin main --follow-tags
-```
-
-### 6. Create GitHub Release
-1. Navigate to the repository [Releases](https://github.com/7obyGit/aw/releases) page.
-2. Click **Draft a new release**.
-3. Select the Git tag created in Step 3.
-4. Add a title (e.g., `v1.1.0`) and document the changes from the MR.
-5. Click **Publish release**.
+### How to Trigger a Release
+To ensure a release is triggered correctly, use the following commit prefixes in your PR:
+- `fix:` triggers a **patch** release (e.g., 0.1.0 -> 0.1.1)
+- `feat:` triggers a **minor** release (e.g., 0.1.0 -> 0.2.0)
+- `perf:` triggers a **patch** release
+- `BREAKING CHANGE:` in the footer triggers a **major** release (e.g., 0.1.0 -> 1.0.0)
 
 ---
 

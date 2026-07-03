@@ -7,7 +7,6 @@
   },
   "release": {
     "branches": [
-      "dev",
       "main"
     ],
     "plugins": [
@@ -17,7 +16,7 @@
       [
         "@semantic-release/npm",
         {
-          "npmPublish": false
+          "npmPublish": true
         }
       ],
       [
@@ -98,7 +97,7 @@
     "vitest": "^4.1.6"
   },
   "validate-branch-name": {
-    "pattern": "^(main|dev){1}$|^(feat|fix|chore|docs|style|refactor|perf|test|build|ci)\\/.+$",
+    "pattern": "^main$|^(feat|fix|chore|docs|style|refactor|perf|test|build|ci)\\/.+$",
     "errorMsg": "❌ Error: Invalid branch name format.\nBranches must use conventional prefixes. Example: feat/login-screen or fix/typo"
   }
 }
