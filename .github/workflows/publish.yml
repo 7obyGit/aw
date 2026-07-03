@@ -32,6 +32,11 @@ jobs:
       - name: Build Project
         run: npm run build
 
+      # Note: @semantic-release/git and @semantic-release/changelog plugins were removed
+      # from package.json to avoid direct pushes to the protected main branch,
+      # which are blocked by "Require a pull request" and CodeQL rules.
+      # To re-enable automatic version commits, use a Personal Access Token (PAT)
+      # with bypass permissions instead of GITHUB_TOKEN.
       - name: Release to GitHub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
