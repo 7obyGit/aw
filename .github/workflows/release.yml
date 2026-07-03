@@ -1,4 +1,4 @@
-name: Publish
+name: Release
 
 on:
   push:
@@ -6,12 +6,13 @@ on:
       - main
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
-
     permissions:
-      contents: read
+      contents: write
       id-token: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout Code
@@ -37,14 +38,8 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Publish to NPM
+      - name: Release to GitHub & NPM
         env:
-          NPM_CONFIG_PROVENANCE: true
-        run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          VERSION=$(node -p "require('./package.json').version")
-          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
-            echo "Version $VERSION already exists on NPM. Skipping publish."
-          else
-            npm publish --access public
-          fi
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
