@@ -99,5 +99,9 @@
   "validate-branch-name": {
     "pattern": "^main$|^(feat|fix|chore|docs|style|refactor|perf|test|build|ci)\\/.+$",
     "errorMsg": "❌ Error: Invalid branch name format.\nBranches must use conventional prefixes. Example: feat/login-screen or fix/typo"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.28.1": true
   }
 }
