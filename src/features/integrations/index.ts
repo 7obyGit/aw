@@ -17,6 +17,7 @@ import { CargoIntegration } from "./impl/rust/cargoIntegration.js";
 import { GoIntegration } from "./impl/go/goIntegration.js";
 import { TaskfileIntegration } from "./impl/task/taskfileIntegration.js";
 import { JustfileIntegration } from "./impl/just/justfileIntegration.js";
+import { SpaceIntegration } from "./impl/space/spaceIntegration.js";
 
 // Register built-in integrations
 integrationManager.register(new AwIntegration());
@@ -35,6 +36,7 @@ integrationManager.register(new CargoIntegration());
 integrationManager.register(new GoIntegration());
 integrationManager.register(new TaskfileIntegration());
 integrationManager.register(new JustfileIntegration());
+integrationManager.register(new SpaceIntegration());
 
 const shellIntegration: ShellIntegration = new ShellIntegration();
 integrationManager.register(shellIntegration);
