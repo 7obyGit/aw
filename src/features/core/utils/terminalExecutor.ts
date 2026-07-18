@@ -2,7 +2,7 @@ import * as prompts from "@clack/prompts";
 import colors from "picocolors";
 import { spawn, ChildProcess } from "node:child_process";
 import { loadEnvFiles } from "./envLoader.js";
-import PACKAGE_DATA from "../../../../package.json" assert { type: "json" };
+import PACKAGE_DATA from "../../../../package.json" with { type: "json" };
 
 /**
  * Options for command execution.
