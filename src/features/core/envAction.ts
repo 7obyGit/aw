@@ -1,7 +1,7 @@
 import * as prompts from "@clack/prompts";
 import colors from "picocolors";
 import { loadDetailedEnv } from "./utils/envLoader.js";
-import PACKAGE_DATA from "../../../package.json" assert { type: "json" };
+import PACKAGE_DATA from "../../../package.json" with { type: "json" };
 
 export interface IEnvActionOptions {
     json?: boolean;

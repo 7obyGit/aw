@@ -1,7 +1,7 @@
 import { cac } from "cac";
 import * as prompts from "@clack/prompts";
 import colors from "picocolors";
-import PACKAGE_DATA from "../../package.json" assert { type: "json" };
+import PACKAGE_DATA from "../../package.json" with { type: "json" };
 
 import { initAction } from "../features/core/initAction.js";
 import {
