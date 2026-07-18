@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import { join } from "node:path";
 import { IntegrationManager } from "../../../src/features/integrations/manager";
 import { IIntegration } from "../../../src/features/integrations/types/IIntegration";
 import { IScript } from "../../../src/features/scripts/types/IScript";
@@ -83,5 +84,44 @@ describe("IntegrationManager", () => {
 
         const notFound = await manager.getScript("nonexistent", "/some/dir");
         expect(notFound).toBeUndefined();
+    });
+
+    it("should prefer scripts from more local configuration", async () => {
+        const manager = new IntegrationManager();
+        const workingDirectory = "/workspace/project/packages/app";
+        const inheritedScript: IScript = {
+            name: "update",
+            path: "/workspace/.aw/update.sh",
+            type: "aw",
+            source: ".aw",
+            confidence: 1,
+            command: "bash update.sh",
+        };
+        const localScript: IScript = {
+            name: "update",
+            path: join(workingDirectory, "package.json"),
+            type: "npm",
+            source: "package.json",
+            confidence: 1,
+            command: "npm run update",
+        };
+
+        manager.register({
+            id: "aw",
+            name: "AW",
+            description: "AW scripts",
+            getScripts: vi.fn().mockResolvedValue([inheritedScript]),
+        });
+        manager.register({
+            id: "npm",
+            name: "NPM",
+            description: "NPM scripts",
+            getScripts: vi.fn().mockResolvedValue([localScript]),
+        });
+
+        const scripts = await manager.discoverScripts(workingDirectory);
+
+        expect(scripts).toEqual([localScript, inheritedScript]);
+        expect(await manager.getScript("update", workingDirectory)).toBe(localScript);
     });
 });
