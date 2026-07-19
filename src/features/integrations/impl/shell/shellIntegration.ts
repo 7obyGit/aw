@@ -2,7 +2,7 @@ import { readdir } from "node:fs/promises";
 import { join, extname, basename } from "node:path";
 import { IIntegration } from "../../types/IIntegration";
 import { IScript } from "../../../scripts/types/IScript";
-import { getShellInterpreter } from "../../utils/shellScript";
+import { ShellScriptDetector } from "../../utils/shellScriptDetector";
 
 export class ShellIntegration implements IIntegration {
     public readonly id: string = "shell";
@@ -20,7 +20,8 @@ export class ShellIntegration implements IIntegration {
                 }
 
                 const filePath: string = join(workingDirectory, entry.name);
-                const interpreter: string | undefined = await getShellInterpreter(filePath);
+                const interpreter: string | undefined =
+                    await ShellScriptDetector.getInterpreter(filePath);
 
                 if (extname(entry.name) === ".sh" || interpreter) {
                     shellFiles.push({ name: entry.name, interpreter: interpreter || "bash" });

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { AwIntegration } from "../../../../../src/features/integrations/impl/aw/awIntegration";
 import * as fs from "node:fs";
-import { getShellInterpreter } from "../../../../../src/features/integrations/utils/shellScript";
+import { ShellScriptDetector } from "../../../../../src/features/integrations/utils/shellScriptDetector";
 
 vi.mock("node:fs", () => ({
     promises: {
@@ -10,8 +10,10 @@ vi.mock("node:fs", () => ({
     },
 }));
 
-vi.mock("../../../../../src/features/integrations/utils/shellScript", () => ({
-    getShellInterpreter: vi.fn(),
+vi.mock("../../../../../src/features/integrations/utils/shellScriptDetector", () => ({
+    ShellScriptDetector: {
+        getInterpreter: vi.fn(),
+    },
 }));
 
 describe("AwIntegration", () => {
@@ -30,7 +32,7 @@ describe("AwIntegration", () => {
             return { isDirectory: () => false } as any;
         });
         vi.mocked(fs.promises.readdir).mockResolvedValue(["deploy"] as any);
-        vi.mocked(getShellInterpreter).mockResolvedValue("/bin/zsh");
+        vi.mocked(ShellScriptDetector.getInterpreter).mockResolvedValue("/bin/zsh");
 
         const scripts = await new AwIntegration().getScripts("/workspace/project");
 
