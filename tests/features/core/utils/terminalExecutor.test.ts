@@ -4,12 +4,29 @@ import { spawn } from "node:child_process";
 import { loadEnvFiles } from "../../../../src/features/core/utils/envLoader";
 import PACKAGE_DATA from "../../../../package.json";
 
+const streamHandlers = vi.hoisted(() => ({
+    stdoutData: undefined as ((chunk: string) => void) | undefined,
+}));
+
+vi.mock("picocolors", () => ({
+    default: {
+        dim: (value: string) => value,
+        green: (value: string) => value,
+        red: (value: string) => value,
+        yellow: (value: string) => value,
+    },
+}));
+
 vi.mock("node:child_process", () => ({
     spawn: vi.fn(() => ({
         on: vi.fn((event, cb) => {
             if (event === "close") setTimeout(() => cb(0), 0);
         }),
-        stdout: { on: vi.fn() },
+        stdout: {
+            on: vi.fn((event, cb) => {
+                if (event === "data") streamHandlers.stdoutData = cb;
+            }),
+        },
         stderr: { on: vi.fn() },
     })),
 }));
@@ -74,5 +91,21 @@ describe("terminalExecutor Environment Variables", () => {
                 }),
             })
         );
+    });
+
+    it("should reset the terminal column before each forwarded output line", async () => {
+        const writeSpy = vi.spyOn(process.stdout, "write").mockReturnValue(true);
+        const longLine = "a".repeat(100);
+        const execution = executeCommand({
+            cwd: "/test/cwd",
+            displayName: "test",
+            command: "echo test",
+        });
+
+        streamHandlers.stdoutData?.(`${longLine}\nnext line\n`);
+        await execution;
+
+        expect(writeSpy).toHaveBeenCalledWith(`│  ${longLine}\r\n│  next line\r\n`);
+        writeSpy.mockRestore();
     });
 });

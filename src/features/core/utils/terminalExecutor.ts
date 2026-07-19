@@ -71,7 +71,7 @@ export async function executeCommand(options: ExecutionOptions): Promise<void> {
 
             for (let i = 0; i < str.length; i++) {
                 if (str[i] === "\n") {
-                    const line = str.substring(startIndex, i + 1);
+                    const line = str.substring(startIndex, i + 1).replace(/\r?\n$/, "\r\n");
                     if (atStartOfLine) {
                         result += prefix;
                     }
