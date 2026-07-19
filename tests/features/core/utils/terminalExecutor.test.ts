@@ -8,6 +8,15 @@ const streamHandlers = vi.hoisted(() => ({
     stdoutData: undefined as ((chunk: string) => void) | undefined,
 }));
 
+vi.mock("picocolors", () => ({
+    default: {
+        dim: (value: string) => value,
+        green: (value: string) => value,
+        red: (value: string) => value,
+        yellow: (value: string) => value,
+    },
+}));
+
 vi.mock("node:child_process", () => ({
     spawn: vi.fn(() => ({
         on: vi.fn((event, cb) => {
