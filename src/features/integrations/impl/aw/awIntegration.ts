@@ -2,6 +2,7 @@ import { IIntegration } from "../../types/IIntegration";
 import { IScript } from "../../../scripts/types/IScript";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { getShellInterpreter } from "../../utils/shellScript";
 
 export class AwIntegration implements IIntegration {
     readonly id: string = "aw";
@@ -42,13 +43,14 @@ export class AwIntegration implements IIntegration {
             const stat = await fs.promises.stat(filePath);
 
             if (stat.isFile()) {
+                const interpreter: string = (await getShellInterpreter(filePath)) || "bash";
                 const script: IScript = {
                     name: path.parse(file).name,
                     source: ".aw",
                     path: filePath,
                     type: this.id,
                     confidence: 1.0,
-                    command: `bash "${filePath}"`,
+                    command: `${interpreter} "${filePath}"`,
                     description: `${path.relative(process.cwd(), filePath)}`,
                 };
                 scripts.push(script);

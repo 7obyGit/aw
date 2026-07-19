@@ -1,10 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
 import { ShellIntegration } from "../../../../../src/features/integrations/impl/shell/shellIntegration";
-import { readdir } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 
 vi.mock("node:fs/promises", () => ({
     readdir: vi.fn(),
+    stat: vi.fn(),
+    readFile: vi.fn(),
 }));
 
 describe("ShellIntegration", () => {
@@ -16,7 +18,10 @@ describe("ShellIntegration", () => {
 
     it("should return shell scripts from directory", async () => {
         const integration = new ShellIntegration();
-        const mockFiles = ["script1.sh", "script2.sh", "readme.md", "other.txt"];
+        const mockFiles = ["script1.sh", "script2.sh", "readme.md", "other.txt"].map((name) => ({
+            name,
+            isFile: () => true,
+        }));
         vi.mocked(readdir).mockResolvedValue(mockFiles as any);
 
         const workingDir = "/test/dir";
@@ -33,6 +38,32 @@ describe("ShellIntegration", () => {
             command: `bash "${join(workingDir, "script1.sh")}"`,
         });
         expect(scripts[1].name).toBe("script2");
+    });
+
+    it("should discover extensionless shell scripts from their shebang", async () => {
+        vi.mocked(stat).mockResolvedValue({
+            isFile: () => true,
+            size: 24,
+        } as any);
+        vi.mocked(readFile).mockImplementation(async (filePath) =>
+            String(filePath).endsWith("build")
+                ? "#!/usr/bin/env bash\necho build\n"
+                : "#!/usr/bin/env python\n"
+        );
+        vi.mocked(readdir).mockResolvedValue([
+            { name: "build", isFile: () => true },
+            { name: "run.py", isFile: () => true },
+        ] as any);
+
+        const integration = new ShellIntegration();
+        const scripts = await integration.getScripts("/test/dir");
+
+        expect(scripts).toEqual([
+            expect.objectContaining({
+                name: "build",
+                command: `bash "${join("/test/dir", "build")}"`,
+            }),
+        ]);
     });
 
     it("should return empty array on error", async () => {
