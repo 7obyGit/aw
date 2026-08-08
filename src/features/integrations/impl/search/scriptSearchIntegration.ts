@@ -3,7 +3,6 @@ import { readdir } from "node:fs/promises";
 import type { Dirent } from "node:fs"; // Import the native type
 import type { IScript } from "../../../scripts/types/IScript.js";
 import type { IIntegration } from "../../types/IIntegration.js";
-import { ShellIntegration } from "../shell/shellIntegration.js";
 
 export class ScriptSearchIntegration implements IIntegration {
     public id: string = "script search";
@@ -12,10 +11,10 @@ export class ScriptSearchIntegration implements IIntegration {
 
     private static likelyDirNames: string[] = ["script", "task"];
 
-    private shellIntegration: ShellIntegration;
+    private scriptIntegrations: IIntegration[];
 
-    public constructor(shellIntegration: ShellIntegration) {
-        this.shellIntegration = shellIntegration;
+    public constructor(...scriptIntegrations: IIntegration[]) {
+        this.scriptIntegrations = scriptIntegrations;
     }
 
     public async getScripts(workingDirectory: string): Promise<IScript[]> {
@@ -34,8 +33,12 @@ export class ScriptSearchIntegration implements IIntegration {
             }
 
             // Await and push scripts using flat modern arrays
-            const scripts: IScript[] = await this.shellIntegration.getScripts(fullPath);
-            results.push(...scripts);
+            const scripts: IScript[][] = await Promise.all(
+                this.scriptIntegrations.map((integration: IIntegration) =>
+                    integration.getScripts(fullPath)
+                )
+            );
+            results.push(...scripts.flat());
         }
 
         return results;

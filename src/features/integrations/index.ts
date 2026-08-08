@@ -14,6 +14,7 @@ import { ScriptSearchIntegration } from "./impl/search/scriptSearchIntegration.j
 import { MakefileIntegration } from "./impl/makefile/makefileIntegration.js";
 import { DockerComposeIntegration } from "./impl/docker/dockerComposeIntegration.js";
 import { CargoIntegration } from "./impl/rust/cargoIntegration.js";
+import { RustScriptIntegration } from "./impl/rust/rustScriptIntegration.js";
 import { GoIntegration } from "./impl/go/goIntegration.js";
 import { TaskfileIntegration } from "./impl/task/taskfileIntegration.js";
 import { JustfileIntegration } from "./impl/just/justfileIntegration.js";
@@ -33,6 +34,8 @@ integrationManager.register(new BatchIntegration());
 integrationManager.register(new MakefileIntegration());
 integrationManager.register(new DockerComposeIntegration());
 integrationManager.register(new CargoIntegration());
+const rustScriptIntegration: RustScriptIntegration = new RustScriptIntegration();
+integrationManager.register(rustScriptIntegration);
 integrationManager.register(new GoIntegration());
 integrationManager.register(new TaskfileIntegration());
 integrationManager.register(new JustfileIntegration());
@@ -40,7 +43,7 @@ integrationManager.register(new SpaceIntegration());
 
 const shellIntegration: ShellIntegration = new ShellIntegration();
 integrationManager.register(shellIntegration);
-integrationManager.register(new ScriptSearchIntegration(shellIntegration));
+integrationManager.register(new ScriptSearchIntegration(shellIntegration, rustScriptIntegration));
 
 export * from "./types/IIntegration";
 export * from "./manager";
