@@ -79,7 +79,7 @@ aw
 | **NPM** | Automatically pulls all scripts defined in `package.json`.                               |
 | **Makefile** | Automatically finds targets in `Makefile` or `makefile`.                                 |
 | **Docker Compose** | Standard commands (`up`, `down`, `ps`, etc.) for `docker-compose.yml` or `compose.yaml`. |
-| **Cargo (Rust)** | Common `cargo` commands (`build`, `run`, `test`, etc.) when `Cargo.toml` is present.     |
+| **Cargo (Rust)** | Common `cargo` commands and custom `[alias]` entries from Cargo config files.            |
 | **Rust Scripts** | Finds standalone `.rs` files and runs them with Cargo's nightly single-file script mode. |
 | **Go** | Common `go` commands (`build`, `run`, `test`, etc.) when `go.mod` is present.             |
 | **Taskfile** | Discovers tasks in `Taskfile.yml` or `Task.yml`.                                         |
