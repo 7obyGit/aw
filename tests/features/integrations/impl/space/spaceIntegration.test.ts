@@ -100,4 +100,77 @@ describe("SpaceIntegration", () => {
         const scripts = await integration.getScripts(process.cwd());
         expect(scripts).toEqual([]);
     });
+
+    it("discovers JSONC workspace scripts from documented Space directories", async () => {
+        const workingDirectory = join(testHome, "project", "packages", "app");
+        const spacesDirectory = join(testHome, "project", ".space", "spaces");
+        await mkdir(workingDirectory, { recursive: true });
+        await mkdir(spacesDirectory, { recursive: true });
+        await writeFile(
+            join(spacesDirectory, "project.code-workspace"),
+            `{
+                // Space workspace files allow JSON with comments and trailing commas.
+                "folders": [],
+                "space": {
+                    "scripts": {
+                        "test": {
+                            "pre-command": "echo before",
+                            "command": "npm test",
+                            "post-command": "echo after",
+                        },
+                        "docs": "echo https://example.com/docs",
+                    },
+                },
+            }`
+        );
+
+        const scripts = await new SpaceIntegration().getScripts(workingDirectory);
+
+        expect(scripts).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    name: "test",
+                    path: join(spacesDirectory, "project.code-workspace"),
+                    command: "echo before ; npm test ; echo after",
+                }),
+                expect.objectContaining({
+                    name: "docs",
+                    description: "echo https://example.com/docs",
+                    command: "echo https://example.com/docs",
+                }),
+            ])
+        );
+    });
+
+    it("uses a locally configured active workspace and avoids its saved duplicate", async () => {
+        const workingDirectory = join(testHome, "project");
+        const configDirectory = join(workingDirectory, ".space");
+        const spacesDirectory = join(configDirectory, "spaces");
+        const activePath = join(workingDirectory, "active.code-workspace");
+        const savedPath = join(spacesDirectory, "project.code-workspace");
+        const workspace = {
+            folders: [],
+            space: {
+                path: savedPath,
+                scripts: { build: "npm run build" },
+            },
+        };
+        await mkdir(spacesDirectory, { recursive: true });
+        await writeFile(
+            join(configDirectory, "config.json"),
+            JSON.stringify({ active: { path: activePath } })
+        );
+        await writeFile(activePath, JSON.stringify(workspace));
+        await writeFile(savedPath, JSON.stringify(workspace));
+        vi.mocked(child_process.execSync).mockReturnValue(Buffer.from("/usr/local/bin/space"));
+
+        const scripts = await new SpaceIntegration().getScripts(workingDirectory);
+
+        expect(scripts.filter((script) => script.name === "build")).toEqual([
+            expect.objectContaining({
+                path: activePath,
+                command: "space run build",
+            }),
+        ]);
+    });
 });
