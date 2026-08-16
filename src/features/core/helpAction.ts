@@ -111,13 +111,13 @@ export function displayCommandHelp(command: any): void {
  */
 export async function displayLandingPage(): Promise<void> {
     const scripts: IScript[] = await integrationManager.discoverScripts(process.cwd());
-    const names: string[] = scripts.map((s: IScript) => s.name);
-    const count = scripts.length;
+    const names: string[] = [...new Set(scripts.map((s: IScript) => s.name))].sort();
+    const count = names.length;
 
     prompts.intro(colors.magenta("Automated Workflow (aw)"));
 
     prompts.log.message(`${colors.cyan(count)} script${count === 1 ? "" : "s"} are available`);
-    prompts.log.message(`  (${names.sort().join(", ")})`);
+    prompts.log.message(`  (${names.join(", ")})`);
 
     prompts.log.step(colors.bold("Get Started"));
     prompts.log.message(`  • See available scripts: ${colors.cyan("aw list scripts")}`);
