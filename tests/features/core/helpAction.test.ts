@@ -12,6 +12,19 @@ vi.mock("@clack/prompts", () => ({
     outro: vi.fn(),
 }));
 
+vi.mock("picocolors", () => {
+    const identity = (value: string): string => value;
+
+    return {
+        default: {
+            bold: identity,
+            cyan: identity,
+            dim: identity,
+            magenta: identity,
+        },
+    };
+});
+
 vi.mock("../../../src/features/integrations/index", () => ({
     integrationManager: {
         discoverScripts: vi.fn(),
